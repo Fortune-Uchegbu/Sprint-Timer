@@ -1,7 +1,14 @@
-export type Task = {
+export interface Task {
+    // User-defined fields
+    title: string; 
+    description?: string;
+    category: string;
+    priority: 'low' | 'medium' | 'high';
+    duration: number; 
+    dueDate?: string | null;
+    
+    // Auto-managed fields
     id: string;             
-    title: string;         
-    duration: number;        
     remaining: number;     
     status: "pending" | "running" | "paused" | "completed";
     reminder?: number | null;       // optional time before completion to trigger alarm
@@ -9,7 +16,7 @@ export type Task = {
     updatedAt: string | null;
 }
 
-export type AppContextType = {
+export interface AppContextType {
     tasks : Task[],
     currentTaskId: string | null,
     setTasks: React.Dispatch<React.SetStateAction<Task[]>>,
