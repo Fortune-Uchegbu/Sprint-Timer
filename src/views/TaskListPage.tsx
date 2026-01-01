@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { appContext } from "../context/AppContext";
+import { AppContext } from "../context/AppContext";
 import { ensureContext } from "../utils/handleEror";  
 import { TaskCard } from "../components";
 // type taskListTypes = {
@@ -7,7 +7,7 @@ import { TaskCard } from "../components";
 //     currentTaskId: string | null
 // }
 const TaskListPage = () => {
-    const context = ensureContext(useContext(appContext), 'TaskList');
+    const context = ensureContext(useContext(AppContext), 'TaskList');
     const { tasks, currentTaskId } = context;
     return (
         <>
