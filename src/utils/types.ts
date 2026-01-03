@@ -5,12 +5,13 @@ export interface Task {
     category: string;
     priority: 'low' | 'medium' | 'high';
     duration: number; 
-    dueDate?: string | null;
+    dueDate?: string;
     
     // Auto-managed fields
     id?: string;             
     remaining?: number;     
     status?: "pending" | "running" | "paused" | "completed";
+    dueDateBg?: string;
     reminder?: number | null;       // optional time before completion to trigger alarm
     createdAt?: string;
     updatedAt?: string | null;

@@ -1,6 +1,7 @@
-import { createContext, useState } from 'react';
+import { createContext, useState, useEffect } from 'react';
 import type { ReactNode } from 'react';
-import type { Task, AppContextType } from '../utils/types'
+import type { Task, AppContextType} from '../utils'
+import { formatTimeLeft } from '../utils';
 
 // Get data from local storage at load time
 const loadData = <T,>(storageTitle: string, defaultData: T[]) : T[] => {
@@ -18,29 +19,38 @@ const loadData = <T,>(storageTitle: string, defaultData: T[]) : T[] => {
     }
 }
 
-const now = () => new Date().toISOString()
-
 
 export const AppContext = createContext<AppContextType | undefined >(undefined)
 export const AppProvider = ({ children } : { children: ReactNode }) => {
+    const [now, setNow] = useState<Date>(new Date());
     const [tasks, setTasks] = useState<Task[]>(loadData<Task>('tasks', []));
     const [currentTaskId, setCurrentTaskId] = useState<string | null>(null);
-    const [taskCategories, setTaskCategories] = useState<string[]>(loadData<string>('taskCategories', ['Other', 'Work', 'School', 'Personal', 'Health']));
+    const [taskCategories, setTaskCategories] = useState<string[]>(loadData<string>('taskCategories', ['other', 'work', 'school', 'personal', 'health']));
+
+    // effect to manage now date object
+    useEffect(() => {
+        const interval = setInterval(() => {setNow(new Date())}, 1000 * 60 * 60); // Update every hour
+        return () => clearInterval(interval);
+    }, [])
+
 
     const addTask = ({title, description, category, priority, duration, dueDate }: Task): boolean => {
         const idNumber = crypto.randomUUID();
+        const timeLeft = formatTimeLeft(now, dueDate)
+
         const newTask: Task = {
             id: idNumber,
             title: title,
             description: description,
             category: category,
             priority: priority,
-            dueDate: dueDate,
+            dueDate: timeLeft.text,
+            dueDateBg: timeLeft.bg,
             duration: duration,
             remaining: duration,
             status: "pending" as const,
             reminder: null,
-            createdAt: now(),
+            createdAt: new Date().toISOString(),
             updatedAt: null,
         }
         const payload = {

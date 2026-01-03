@@ -44,7 +44,7 @@ const TaskInputPage = () => {
   const addCategory = (e: React.FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
     const data = new FormData(e.currentTarget);
-    const cat = data.get('addCategory') as string;
+    const cat = (data.get('addCategory') as string).toLowerCase().trim();
     
     const param = {
       storageTitle: 'taskCategories',
@@ -116,7 +116,12 @@ const TaskInputPage = () => {
         </select>
         
         <label htmlFor="dueDate">Due date (optional):</label>
-        <input className='p-2' type="date" name="dueDate" id="dueDate" />
+        <input 
+        className='p-2'
+        type="date" 
+        name="dueDate"
+        min={new Date().toISOString().split('T')[0]} 
+        id="dueDate" />
 
         <label htmlFor="taskDuration">Duration (in minutes):</label>
         <input className='p-2' type="number" name="duration" id="taskDuration" required min={1}/>
