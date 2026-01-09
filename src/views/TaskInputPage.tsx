@@ -1,10 +1,12 @@
 import React, { useState, useContext } from 'react';
 import { AppContext } from '../context/AppContext';
 import { ensureContext } from '../utils/handleEror';
+import { useNavigate } from 'react-router-dom';
 
 const TaskInputPage = () => {
   const context = ensureContext(useContext(AppContext), 'TaskInputPage');
   const { addTask, update, taskCategories, setTaskCategories } = context;
+  const navigate = useNavigate();
 
   //catergories state
   const [selectedCategory, setSelectedCategory] = useState(taskCategories[0]);
@@ -27,6 +29,7 @@ const TaskInputPage = () => {
     if (success) {
       e.currentTarget.reset()
       setSelectedCategory(taskCategories[0]);
+      navigate('/'); // Redirect to task list after adding task
     } 
   }
   const toggleCategories = (): void => {

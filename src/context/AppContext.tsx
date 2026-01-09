@@ -26,6 +26,7 @@ export const AppProvider = ({ children } : { children: ReactNode }) => {
     const [tasks, setTasks] = useState<Task[]>(loadData<Task>('tasks', []));
     const [currentTaskId, setCurrentTaskId] = useState<string | null>(null);
     const [taskCategories, setTaskCategories] = useState<string[]>(loadData<string>('taskCategories', ['other', 'work', 'school', 'personal', 'health']));
+    const [activeTask, setActiveTask] = useState<Task | null>(null);
 
     // effect to manage now date object
     useEffect(() => {
@@ -86,7 +87,18 @@ export const AppProvider = ({ children } : { children: ReactNode }) => {
     }
 
     return (
-        <AppContext.Provider value = {{tasks, currentTaskId, setTasks, setCurrentTaskId, addTask, update, taskCategories, setTaskCategories}} >
+        <AppContext.Provider 
+        value = {{
+            tasks,
+            currentTaskId,
+            setTasks,
+            setCurrentTaskId,
+            addTask, update,
+            taskCategories,
+            setTaskCategories,
+            activeTask,
+            setActiveTask
+        }} >
             {children}
         </AppContext.Provider>
     )

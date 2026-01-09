@@ -11,10 +11,10 @@ const TaskListPage = () => {
     const { tasks, currentTaskId } = context;
     return (
         <>
-        <header>
+        <header className="bg-black">
             <h1 className="text-3xl py-5">Tasks</h1>
         </header>
-        <main className="flex flex-col gap-y-2 px-2">
+        <main className="flex flex-col gap-y-2 px-2 bg-black">
             {tasks.map((task, key) => (
                 <TaskCard 
                 key={key}

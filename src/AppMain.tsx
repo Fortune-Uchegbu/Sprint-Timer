@@ -1,7 +1,7 @@
 import type { Task } from './utils/types';
 import { useState } from 'react';
-import { Routes, Route } from 'react-router-dom';  
-import { RunningTask, TaskInput, TaskList } from './views';
+import { Routes, Route, Navigate } from 'react-router-dom';  
+import { RunningTask, TaskInput, TaskList, TaskDetails } from './views';
 
 function Main() {
   type AppState = {
@@ -13,9 +13,11 @@ function Main() {
 
   return (
     <Routes>
-        <Route path = '/' element = {<TaskList />} />
-        <Route path = '/addTask' element = {<TaskInput />} />
-        <Route path = '/runningTask' element = {<RunningTask />} />
+      <Route path= '/' element = {<Navigate to="/tasks" />} />
+      <Route path = '/tasks' element = {<TaskList />} />
+      <Route path = '/addTask' element = {<TaskInput />} />
+      <Route path = '/runningTask' element = {<RunningTask />} />
+      <Route path = '/task/:id' element = {<TaskDetails />} />
     </Routes>
   )
 }

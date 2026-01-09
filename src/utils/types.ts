@@ -26,4 +26,6 @@ export interface AppContextType {
     update: <T,>({storageTitle, newData, stateSetter}: {storageTitle: string, newData: T, stateSetter: React.Dispatch<React.SetStateAction<T[]>>}) => boolean,
     taskCategories: string[],
     setTaskCategories: React.Dispatch<React.SetStateAction<string[]>>
+    activeTask: Task | null,
+    setActiveTask: React.Dispatch<React.SetStateAction<Task | null>>
 }
