@@ -29,3 +29,8 @@ export interface AppContextType {
     activeTask: Task | null,
     setActiveTask: React.Dispatch<React.SetStateAction<Task | null>>
 }
+
+export interface timerData {
+    minsLeft: number,
+    secsLeft: number
+}

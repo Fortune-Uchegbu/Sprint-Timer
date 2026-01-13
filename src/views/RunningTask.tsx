@@ -7,6 +7,7 @@ const RunningTask = () => {
   const appContext = ensureContext(useContext(AppContext), 'running task');
   const { activeTask } = appContext;
   const hotSeat = useHotSeat(activeTask);
+  // console.log(hotSeat.timeLeft, hotSeat.minsLeft, hotSeat.secsLeft)
   const runOptions = () => {
     // pause, resume, skip, end task
   }
@@ -14,7 +15,7 @@ const RunningTask = () => {
     <div>
       <p 
       className="activeTask text-9xl font-bold text-red-900">
-        {`${hotSeat?.minsLeft} : ${hotSeat?.secsLeft}`}
+        {`${hotSeat.minsLeft} : ${hotSeat.secsLeft}`}
       </p>
       {/* <p>{hotSeat?.title}</p>
       <p>{hotSeat?.description}</p> */}
