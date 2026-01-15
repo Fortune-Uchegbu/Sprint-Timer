@@ -1,9 +1,9 @@
-import {  type timerData, ensureContext } from '../utils';
+import { type Task, type timerData, ensureContext } from '../utils';
 import { useState, useEffect, useRef, useContext } from 'react';
 import { AppContext } from '../context/AppContext';
 
 export const useHotSeat = (taskId: string | undefined) => {
-    const { tasks } = ensureContext(useContext(AppContext), 'tasks');
+    const { tasks, updateTasklist } = ensureContext(useContext(AppContext), 'tasks');
     const task = tasks.find((t) => t.id === taskId)
     const initialTime = task?.duration ? (task.duration) : 0
     const [timeLeft, setTimeLeft] = useState<number>(initialTime);
@@ -36,10 +36,9 @@ export const useHotSeat = (taskId: string | undefined) => {
     }
 
     const pauseTask = () => {
-        const remainingTime  = timeLeft;
         clearInterval(countDownId);
-        // update obj remaining key
-        const newTaskObj = {...task, remaining: remainingTime}
+        const newTaskObj = {...task, remaining: timeLeft, status: "paused" as const};
+        updateTasklist(newTaskObj);
         console.log(newTaskObj)
     }
     const stopTask = () => {

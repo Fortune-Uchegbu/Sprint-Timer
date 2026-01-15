@@ -1,6 +1,6 @@
 export interface Task {
     // User-defined fields
-    title: string; 
+    title: string | undefined; 
     description?: string;
     category: string;
     priority: 'low' | 'medium' | 'high';
@@ -23,7 +23,8 @@ export interface AppContextType {
     setTasks: React.Dispatch<React.SetStateAction<Task[]>>,
     setCurrentTaskId: React.Dispatch<React.SetStateAction<string | undefined>>,
     addTask: ({title, description, category, priority, duration, dueDate }: Task) => boolean,
-    update: <T,>({storageTitle, newData, stateSetter}: {storageTitle: string, newData: T, stateSetter: React.Dispatch<React.SetStateAction<T[]>>}) => boolean,
+    updateStore: <T,>({storageTitle, newData, stateSetter}: {storageTitle: string, newData: T, stateSetter: React.Dispatch<React.SetStateAction<T[]>>}) => boolean,
+    updateTasklist: (newTaskObj : Task) => void,
     taskCategories: string[],
     setTaskCategories: React.Dispatch<React.SetStateAction<string[]>>
 }

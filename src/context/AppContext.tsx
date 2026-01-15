@@ -33,7 +33,6 @@ export const AppProvider = ({ children } : { children: ReactNode }) => {
         return () => clearInterval(interval);
     }, [])
 
-
     const addTask = ({title, description, category, priority, duration, dueDate }: Task): boolean => {
         const idNumber = crypto.randomUUID();
         const timeLeft = formatTimeLeft(now, dueDate)
@@ -58,12 +57,12 @@ export const AppProvider = ({ children } : { children: ReactNode }) => {
             newData: newTask,
             stateSetter: setTasks
         }
-        const success = update(payload);
+        const success = updateStore(payload);
         
         return success;
     }
     // helper function to update state and local storage
-    const update = <T,>({
+    const updateStore = <T,>({
         storageTitle,
         newData,
         stateSetter
@@ -84,6 +83,12 @@ export const AppProvider = ({ children } : { children: ReactNode }) => {
             return false;
         }
     }
+    // helper function to update tasklist elements without loosing position
+    const updateTasklist = (newTaskObj: Task ) => {
+        const newTaskList = [...tasks, newTaskObj];
+        console.log(newTaskList)
+        console.log('updating...')
+    }
 
     return (
         <AppContext.Provider 
@@ -92,7 +97,7 @@ export const AppProvider = ({ children } : { children: ReactNode }) => {
             currentTaskId,
             setTasks,
             setCurrentTaskId,
-            addTask, update,
+            addTask, updateStore, updateTasklist,
             taskCategories,
             setTaskCategories,
         }} >

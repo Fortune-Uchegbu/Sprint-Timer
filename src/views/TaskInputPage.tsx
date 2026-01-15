@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 
 const TaskInputPage = () => {
   const context = ensureContext(useContext(AppContext), 'TaskInputPage');
-  const { addTask, update, taskCategories, setTaskCategories } = context;
+  const { addTask, updateStore, taskCategories, setTaskCategories } = context;
   const navigate = useNavigate();
 
   //catergories state
@@ -54,7 +54,7 @@ const TaskInputPage = () => {
       newData: cat,
       stateSetter: setTaskCategories
     }
-    const success = update(param);
+    const success = updateStore(param);
     if (!success) return; // Do not proceed if update failed
     setCategory(cat);
     setModalIsOpen(false);
