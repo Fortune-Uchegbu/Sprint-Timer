@@ -9,11 +9,11 @@ const TaskDetails = () => {
     const { id } = useParams();
     const appContext = useContext(AppContext);
     const contextData = ensureContext(appContext, 'task');
-    const { tasks, setActiveTask } = contextData;
+    const { tasks, setCurrentTaskId } = contextData;
     const task = tasks.find((t) => t.id === id);
-    const runTask = (task: Task) => {
-        setActiveTask(task);
-        navigate('/runningTask');
+    const runTask = () => {
+      setCurrentTaskId(id);
+      navigate('/runningTask');
     };
 
   return (
@@ -33,7 +33,7 @@ const TaskDetails = () => {
  
           <button 
         className="bg-blue-500 text-white px-4 py-2 rounded mt-4"
-          onClick={() => runTask(task)}>
+          onClick={() => runTask}>
             Start task
           </button>
         </>

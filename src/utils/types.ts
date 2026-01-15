@@ -19,15 +19,13 @@ export interface Task {
 
 export interface AppContextType {
     tasks : Task[],
-    currentTaskId: string | null,
+    currentTaskId: string | undefined,
     setTasks: React.Dispatch<React.SetStateAction<Task[]>>,
-    setCurrentTaskId: React.Dispatch<React.SetStateAction<string | null>>,
+    setCurrentTaskId: React.Dispatch<React.SetStateAction<string | undefined>>,
     addTask: ({title, description, category, priority, duration, dueDate }: Task) => boolean,
     update: <T,>({storageTitle, newData, stateSetter}: {storageTitle: string, newData: T, stateSetter: React.Dispatch<React.SetStateAction<T[]>>}) => boolean,
     taskCategories: string[],
     setTaskCategories: React.Dispatch<React.SetStateAction<string[]>>
-    activeTask: Task | null,
-    setActiveTask: React.Dispatch<React.SetStateAction<Task | null>>
 }
 
 export interface timerData {

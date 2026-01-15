@@ -24,9 +24,8 @@ export const AppContext = createContext<AppContextType | undefined >(undefined)
 export const AppProvider = ({ children } : { children: ReactNode }) => {
     const [now, setNow] = useState<Date>(new Date());
     const [tasks, setTasks] = useState<Task[]>(loadData<Task>('tasks', []));
-    const [currentTaskId, setCurrentTaskId] = useState<string | null>(null);
+    const [currentTaskId, setCurrentTaskId] = useState<string | undefined>(undefined);
     const [taskCategories, setTaskCategories] = useState<string[]>(loadData<string>('taskCategories', ['other', 'work', 'school', 'personal', 'health']));
-    const [activeTask, setActiveTask] = useState<Task | null>(null);
 
     // effect to manage now date object
     useEffect(() => {
@@ -96,8 +95,6 @@ export const AppProvider = ({ children } : { children: ReactNode }) => {
             addTask, update,
             taskCategories,
             setTaskCategories,
-            activeTask,
-            setActiveTask
         }} >
             {children}
         </AppContext.Provider>

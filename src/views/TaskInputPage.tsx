@@ -19,7 +19,7 @@ const TaskInputPage = () => {
     e.preventDefault();
     const data = new FormData(e.currentTarget);
     const title = data.get('title') as string;
-    const duration = Number(data.get('duration'));
+    const duration = Number(data.get('duration')) * 60; //convert to seconds
     const description = data.get('description') as string;
     const category = selectedCategory;
     const priority = data.get('priority') as 'low' | 'medium' | 'high';

@@ -4,13 +4,10 @@ import { AppContext } from "../context/AppContext";
 import { ensureContext } from "../utils";
 
 const RunningTask = () => {
-  const appContext = ensureContext(useContext(AppContext), 'running task');
-  const { activeTask } = appContext;
-  const hotSeat = useHotSeat(activeTask);
-  // console.log(hotSeat.timeLeft, hotSeat.minsLeft, hotSeat.secsLeft)
-  const runOptions = () => {
-    // pause, resume, skip, end task
-  }
+  const { currentTaskId } = ensureContext(useContext(AppContext), 'running task id');
+  const data = useHotSeat(currentTaskId);
+  const {hotSeat, pauseTask, stopTask, resumeTask} = data
+  
   return (
     <div>
       <p 
@@ -19,7 +16,8 @@ const RunningTask = () => {
       </p>
       {/* <p>{hotSeat?.title}</p>
       <p>{hotSeat?.description}</p> */}
-      <button onClick={runOptions}>Pause</button>
+      <button className="p-6 bg-blue-950 text-white rounded-sm mr-5" onClick={pauseTask}>Pause</button>
+      <button className="p-6 bg-blue-950 text-white rounded-sm" onClick={stopTask}>Stop</button>
       
     </div>
 
