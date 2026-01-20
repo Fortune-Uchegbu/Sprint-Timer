@@ -1,6 +1,6 @@
 import { createContext, useState, useEffect } from 'react';
 import type { ReactNode } from 'react';
-import type { Task, AppContextType} from '../utils'
+import type { Task, newTaskInput, AppContextType} from '../utils'
 import { formatTimeLeft } from '../utils';
 
 // Get data from local storage at load time
@@ -24,7 +24,7 @@ export const AppContext = createContext<AppContextType | undefined >(undefined)
 export const AppProvider = ({ children } : { children: ReactNode }) => {
     const [now, setNow] = useState<Date>(new Date());
     const [tasks, setTasks] = useState<Task[]>(loadData<Task>('tasks', []));
-    const [currentTaskId, setCurrentTaskId] = useState<string | undefined>(undefined);
+    const [currentTaskId, setCurrentTaskId] = useState<string | null>(null);
     const [taskCategories, setTaskCategories] = useState<string[]>(loadData<string>('taskCategories', ['other', 'work', 'school', 'personal', 'health']));
 
     // effect to manage now date object
@@ -33,7 +33,7 @@ export const AppProvider = ({ children } : { children: ReactNode }) => {
         return () => clearInterval(interval);
     }, [])
 
-    const addTask = ({title, description, category, priority, duration, dueDate }: Task): boolean => {
+    const addTask = ({title, description, category, priority, duration, dueDate }: newTaskInput): boolean => {
         const idNumber = crypto.randomUUID();
         const timeLeft = formatTimeLeft(now, dueDate)
 
@@ -85,9 +85,11 @@ export const AppProvider = ({ children } : { children: ReactNode }) => {
     }
     // helper function to update tasklist elements without loosing position
     const updateTasklist = (newTaskObj: Task ) => {
-        const newTaskList = [...tasks, newTaskObj];
-        console.log(newTaskList)
-        console.log('updating...')
+        setTasks(prev => {
+            const newTaskList = prev.map(task => (task.id === newTaskObj.id) ? newTaskObj : task);
+            localStorage.setItem('tasks', JSON.stringify(newTaskList) )
+            return newTaskList;
+        });
     }
 
     return (

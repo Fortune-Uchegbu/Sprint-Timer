@@ -1,21 +1,35 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { useContext } from "react";
 import { AppContext} from "../context/AppContext";
-import { type Task, ensureContext } from "../utils/";
+import { ensureContext } from "../utils/";
 
 const TaskDetails = () => {
     const navigate = useNavigate();
-    const { id } = useParams();
+    const params = useParams();
+    const id = params.id;
+    if (!id) {
+      navigate('/tasks')
+      return null
+    }
     const contextData = ensureContext(useContext(AppContext), 'task');
     const { tasks, setCurrentTaskId } = contextData;
     const task = tasks.find((t) => t.id === id);
-
-    const runTask = (task: Task) => {
+    if (!task) {
+      navigate ('/tasks');
+      return null;
+    }
+    const runTask = () => {
       setCurrentTaskId(id);
       navigate('/runningTask');
-      console.log("we're in hotseat!");
-
     };
+    const btnText = () => {
+      const status = task.status;
+      const text = (status === 'pending') ? 'Start' :
+      (status === 'running') ? 'Pause' :
+      (status === 'paused') ? 'Resume' :
+      (status === 'completed') ? 'Completed': null;
+      return text;
+    }
 
   return (
     <article>
@@ -34,9 +48,11 @@ const TaskDetails = () => {
  
           <button 
           className="bg-blue-500 text-white px-4 py-2 rounded mt-4"
-          onClick={() => runTask(task)}>
-            Start task
+          onClick={runTask}>
+            {`${btnText()} task`}
           </button>
+
+          {}
         </>
       ) : (
         <>Task not found</>

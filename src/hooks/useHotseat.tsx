@@ -1,11 +1,24 @@
 import { type Task, type timerData, ensureContext } from '../utils';
 import { useState, useEffect, useRef, useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { AppContext } from '../context/AppContext';
 
-export const useHotSeat = (taskId: string | undefined) => {
+export const useHotSeat = (taskId: string | null) => {
+    
+    const navigate = useNavigate();
     const { tasks, updateTasklist } = ensureContext(useContext(AppContext), 'tasks');
-    const task = tasks.find((t) => t.id === taskId)
-    const initialTime = task?.duration ? (task.duration) : 0
+    const task = tasks.find((t) => t.id === taskId);
+    if (!task) {
+        navigate ('/tasks');
+        return null
+    }
+    // one time effect to update status
+    useEffect(() => {
+        console.log('calling hotseat!')
+        const newTaskObj:Task = {...task, status: "running" as const}; // update the task's status
+        updateTasklist(newTaskObj);
+    }, [])
+    const initialTime = task.remaining ? (task.remaining) : 0
     const [timeLeft, setTimeLeft] = useState<number>(initialTime);
     const timerData = useRef<timerData>({
         minsLeft: Math.floor(initialTime / 60),
@@ -36,20 +49,39 @@ export const useHotSeat = (taskId: string | undefined) => {
     }
 
     const pauseTask = () => {
+        console.log('calling pause task!')
+        if (!task) return null
         clearInterval(countDownId);
-        const newTaskObj = {...task, remaining: timeLeft, status: "paused" as const};
+        const newTaskObj:Task = {
+            ...task,
+            remaining: timeLeft, 
+            status: "paused" as const,
+        };
         updateTasklist(newTaskObj);
-        console.log(newTaskObj)
-    }
-    const stopTask = () => {
-        // clear interval
-        // update obj remaining key back to duration
     }
     const resumeTask = () => {
+        console.log('calling resume task!')
         // if obj status is on paused:
         // get remaining and set as initialtime
         // start timer
     }
+    const stopTask = () => {
+        console.log('calling stop task!')
+        clearInterval(countDownId);
+        // pop up modal
+        setTimeLeft(0);
+        const newTaskObj:Task = {...task, remaining: task.duration, status: "pending" as const};
+        updateTasklist(newTaskObj);
+        navigate('/tasks');
+    }
 
-    return {hotSeat, pauseTask, stopTask, resumeTask};
+    const btnText = () => {
+      const status = task.status;
+      const text = (status === 'running') ? 'Pause' :
+      (status === 'paused') ? 'Resume' :
+      (status === 'completed') ? 'Completed': null;
+      return text;
+    }
+
+    return {hotSeat, pauseTask, stopTask, resumeTask, btnText};
 }

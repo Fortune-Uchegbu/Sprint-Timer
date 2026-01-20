@@ -6,8 +6,16 @@ import { ensureContext } from "../utils";
 const RunningTask = () => {
   const { currentTaskId } = ensureContext(useContext(AppContext), 'running task id');
   const data = useHotSeat(currentTaskId);
-  const {hotSeat, pauseTask, stopTask, resumeTask} = data
-  
+  if (!data) {
+    return null
+  }
+  const {hotSeat, pauseTask, stopTask, resumeTask, btnText} = data;
+  const handleBtn = () => {
+    const called = (btnText() === 'Pause') ? pauseTask() :
+    (btnText() === 'Resume') ? resumeTask() : null;
+    return called;
+  }
+    
   return (
     <div>
       <p 
@@ -16,7 +24,7 @@ const RunningTask = () => {
       </p>
       {/* <p>{hotSeat?.title}</p>
       <p>{hotSeat?.description}</p> */}
-      <button className="p-6 bg-blue-950 text-white rounded-sm mr-5" onClick={pauseTask}>Pause</button>
+      <button className="p-6 bg-blue-950 text-white rounded-sm mr-5" onClick={handleBtn}>{btnText()}</button>
       <button className="p-6 bg-blue-950 text-white rounded-sm" onClick={stopTask}>Stop</button>
       
     </div>
